@@ -435,10 +435,10 @@ nav{
     <div class="nl-badge">✉ Newsletter</div>
     <h3>Stay In The Loop</h3>
     <p>Training tips, program updates, and behind-the-scenes — straight to your inbox.</p>
-    <div class="nl-form">
-      <input class="nl-input" type="email" placeholder="your@email.com">
-      <button class="btn-gold">Subscribe</button>
-    </div>
+    <form class="nl-form" id="nl-form" action="https://subscribe-forms.beehiiv.com/1a347954-c852-4b3c-8be5-ec8883eea34c/submissions" method="post" target="_blank">
+      <input class="nl-input" type="email" name="email" placeholder="your@email.com" required>
+      <button class="btn-gold" type="submit">Subscribe</button>
+    </form>
   </div>
 
   <!-- Footer -->
@@ -567,6 +567,25 @@ function sw(tab) {
   pg.scrollTop = 0;
   document.getElementById('nt-' + tab).classList.add('active');
 }
+// Newsletter form submission
+(function() {
+  const form = document.getElementById('nl-form');
+  if (!form) return;
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = form.querySelector('input[name="email"]').value;
+    fetch(form.action, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: 'email=' + encodeURIComponent(email)
+    }).then(() => {
+      form.innerHTML = '<div style="color:var(--gold);padding:14px 18px;text-align:center;width:100%;font-size:13px;letter-spacing:0.5px;">✓ Thanks — check your inbox to confirm.</div>';
+    }).catch(() => {
+      form.innerHTML = '<div style="color:var(--gold);padding:14px 18px;text-align:center;width:100%;font-size:13px;letter-spacing:0.5px;">✓ Thanks — check your inbox to confirm.</div>';
+    });
+  });
+})();
 // Duplicate testimonials for seamless loop
 (function() {
   const t = document.getElementById('testi-track');
